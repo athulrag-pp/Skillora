@@ -19,16 +19,52 @@ export const api = {
     }
   },
 
-  login: async (email, role) => {
+  login: async (email, password, role) => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, role })
+        body: JSON.stringify({ email, password, role })
       });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+      return data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  signup: async ({ name, email, password, role, organization }) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, role, organization })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Sign up failed');
+      }
+      return data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  getMe: async (token) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/me`, {
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!res.ok) return null;
       return await res.json();
     } catch (e) {
-      return { success: true, token: 'mock-token' };
+      return null;
     }
   },
 

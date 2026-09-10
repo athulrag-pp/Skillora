@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 
 // Helper for ESM file paths
@@ -14,8 +15,105 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
+// Node.js Crypto Salted Password Hashing Engine
+export const hashPassword = (password, salt) => {
+  const generatedSalt = salt || crypto.randomBytes(16).toString('hex');
+  const hash = crypto.pbkdf2Sync(password, generatedSalt, 10000, 64, 'sha512').toString('hex');
+  return { salt: generatedSalt, hash };
+};
+
+export const verifyPassword = (password, salt, hash) => {
+  const checkHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+  return checkHash === hash;
+};
+
+// Default hashed password for seed accounts ("demo123")
+const defaultSeedCreds = hashPassword("demo123", "skillorademosalt123");
+
 // Initial seed mock datasets
 const getInitialSeed = () => ({
+  users: [
+    {
+      id: "USR-101",
+      name: "Apex Executive",
+      email: "manager@skillora.demo",
+      role: "MANAGEMENT",
+      organization: "Apex EduTech Global",
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash,
+      createdAt: "2026-09-01T00:00:00Z"
+    },
+    {
+      id: "USR-102",
+      name: "Sales Director",
+      email: "sales@skillora.demo",
+      role: "SALES",
+      organization: "Apex EduTech Global",
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash,
+      createdAt: "2026-09-01T00:00:00Z"
+    },
+    {
+      id: "USR-103",
+      name: "Operations Head",
+      email: "ops@skillora.demo",
+      role: "OPERATIONS",
+      organization: "Apex EduTech Global",
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash,
+      createdAt: "2026-09-01T00:00:00Z"
+    },
+    {
+      id: "USR-104",
+      name: "Arun Kumar",
+      email: "trainer@skillora.demo",
+      role: "TRAINER",
+      organization: "Apex EduTech Global",
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash,
+      createdAt: "2026-09-01T00:00:00Z"
+    },
+    {
+      id: "USR-105",
+      name: "Finance Controller",
+      email: "finance@skillora.demo",
+      role: "FINANCE",
+      organization: "Apex EduTech Global",
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash,
+      createdAt: "2026-09-01T00:00:00Z"
+    },
+    {
+      id: "USR-106",
+      name: "Rahul Verma",
+      email: "student@skillora.demo",
+      role: "STUDENT",
+      organization: "Apex EduTech Global",
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash,
+      createdAt: "2026-09-01T00:00:00Z"
+    },
+    {
+      id: "USR-107",
+      name: "Sanjay Sharma",
+      email: "parent@skillora.demo",
+      role: "PARENT",
+      organization: "Apex EduTech Global",
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash,
+      createdAt: "2026-09-01T00:00:00Z"
+    },
+    {
+      id: "USR-108",
+      name: "System Admin",
+      email: "admin@skillora.demo",
+      role: "ADMIN",
+      organization: "Apex EduTech Global",
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash,
+      createdAt: "2026-09-01T00:00:00Z"
+    }
+  ],
   leads: [
     {
       id: "LEAD-101",

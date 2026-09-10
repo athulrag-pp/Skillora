@@ -17,11 +17,34 @@ export const SkilloraProvider = ({ children }) => {
   });
 
   // Authentication & Active View State
-  const [currentRole, setCurrentRole] = useState('MANAGEMENT');
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('skillora_user');
+      return saved ? JSON.parse(saved) : { name: 'Executive Manager', email: 'manager@skillora.demo', role: 'MANAGEMENT', organization: 'Apex EduTech Global' };
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const [token, setToken] = useState(() => localStorage.getItem('skillora_token') || 'skl_token_demo');
+  const [isAuthenticated, setIsAuthenticated] = useState(() => true);
+
+  const [currentRole, setCurrentRole] = useState(() => {
+    try {
+      const saved = localStorage.getItem('skillora_user');
+      if (saved) return JSON.parse(saved).role || 'MANAGEMENT';
+    } catch (e) {}
+    return 'MANAGEMENT';
+  });
+
   const [activePage, setActivePage] = useState('dashboard');
   const [selectedCustomerId, setSelectedCustomerId] = useState('LEAD-101');
   const [selectedStudentId, setSelectedStudentId] = useState('STU-1002');
   
+  // Mandatory Role Switching Auth Modal Gate State
+  const [isRoleAuthModalOpen, setIsRoleAuthModalOpen] = useState(false);
+  const [targetRoleToSwitch, setTargetRoleToSwitch] = useState(null);
+
   // Real-time Event Stream Indicator
   const [isRealtimeActive, setIsRealtimeActive] = useState(false);
 
@@ -43,6 +66,80 @@ export const SkilloraProvider = ({ children }) => {
   const [isAddTrainerOpen, setIsAddTrainerOpen] = useState(false);
   const [demoStep, setDemoStep] = useState(-1);
   const [toast, setToast] = useState(null);
+
+  // Real DB Authentication & Signup Actions
+  const loginWithCredentials = async (email, password, role) => {
+    try {
+      const res = await api.login(email, password, role);
+      if (res && res.success) {
+        setToken(res.token);
+        setCurrentUser(res.user);
+        setIsAuthenticated(true);
+        setCurrentRole(res.user.role || role || 'MANAGEMENT');
+        localStorage.setItem('skillora_token', res.token);
+        localStorage.setItem('skillora_user', JSON.stringify(res.user));
+        return res.user;
+      }
+      throw new Error(res.error || 'Authentication failed');
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const signupUser = async (formData) => {
+    try {
+      const res = await api.signup(formData);
+      if (res && res.success) {
+        setToken(res.token);
+        setCurrentUser(res.user);
+        setIsAuthenticated(true);
+        setCurrentRole(res.user.role || 'MANAGEMENT');
+        localStorage.setItem('skillora_token', res.token);
+        localStorage.setItem('skillora_user', JSON.stringify(res.user));
+        showToast(`Welcome ${res.user.name}! Account registered in database.`, 'success');
+        triggerConfetti();
+        return res.user;
+      }
+      throw new Error(res.error || 'Sign up registration failed');
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const logout = () => {
+    setToken('');
+    setCurrentUser(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem('skillora_token');
+    localStorage.removeItem('skillora_user');
+    setActivePage('login');
+    showToast('Logged out of session', 'info');
+  };
+
+  const changeRole = (newRole, bypassGate = false) => {
+    if (bypassGate || (currentUser && currentUser.role === newRole)) {
+      setCurrentRole(newRole);
+      if (currentUser) {
+        const updated = { ...currentUser, role: newRole };
+        setCurrentUser(updated);
+        localStorage.setItem('skillora_user', JSON.stringify(updated));
+      }
+      switch (newRole) {
+        case 'TRAINER': setActivePage('trainer_portal'); break;
+        case 'STUDENT': setActivePage('student_portal'); break;
+        case 'PARENT': setActivePage('parent_portal'); break;
+        case 'SALES': setActivePage('crm'); break;
+        case 'OPERATIONS': setActivePage('operations'); break;
+        case 'FINANCE': setActivePage('finance'); break;
+        case 'ADMIN': setActivePage('admin'); break;
+        case 'MANAGEMENT': default: setActivePage('dashboard'); break;
+      }
+      showToast(`Switched view to ${newRole} Portal`, 'info');
+    } else {
+      setTargetRoleToSwitch(newRole);
+      setIsRoleAuthModalOpen(true);
+    }
+  };
 
   // Theme Sync Effect
   useEffect(() => {
@@ -124,21 +221,6 @@ export const SkilloraProvider = ({ children }) => {
       if (eventSource) eventSource.close();
     };
   }, []);
-
-  const changeRole = (newRole) => {
-    setCurrentRole(newRole);
-    switch (newRole) {
-      case 'TRAINER': setActivePage('trainer_portal'); break;
-      case 'STUDENT': setActivePage('student_portal'); break;
-      case 'PARENT': setActivePage('parent_portal'); break;
-      case 'SALES': setActivePage('crm'); break;
-      case 'OPERATIONS': setActivePage('operations'); break;
-      case 'FINANCE': setActivePage('finance'); break;
-      case 'ADMIN': setActivePage('admin'); break;
-      case 'MANAGEMENT': default: setActivePage('dashboard'); break;
-    }
-    showToast(`Switched view to ${newRole} Portal`, 'success');
-  };
 
   const navigateTo = (page) => {
     setActivePage(page);
@@ -261,8 +343,17 @@ export const SkilloraProvider = ({ children }) => {
     <SkilloraContext.Provider value={{
       theme,
       toggleTheme,
+      currentUser,
+      token,
+      isAuthenticated,
+      loginWithCredentials,
+      signupUser,
+      logout,
       currentRole,
       changeRole,
+      isRoleAuthModalOpen,
+      setIsRoleAuthModalOpen,
+      targetRoleToSwitch,
       activePage,
       navigateTo,
       selectedCustomerId,

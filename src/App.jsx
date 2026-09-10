@@ -8,6 +8,7 @@ import { DemoFlowBanner } from './components/common/DemoFlowBanner';
 import { AICopilotModal } from './components/ai/AICopilotModal';
 import { AddStudentModal } from './components/modals/AddStudentModal';
 import { AddTrainerModal } from './components/modals/AddTrainerModal';
+import { RoleAuthModal } from './components/modals/RoleAuthModal';
 
 // Pages
 import { LoginLanding } from './pages/LoginLanding';
@@ -72,6 +73,7 @@ const MainLayout = () => {
         <AICopilotModal />
         <GlobalSearchModal />
         <NotificationCenter />
+        <RoleAuthModal />
         <AddStudentModal isOpen={isAddStudentOpen} onClose={() => setIsAddStudentOpen(false)} />
         <AddTrainerModal isOpen={isAddTrainerOpen} onClose={() => setIsAddTrainerOpen(false)} />
 
