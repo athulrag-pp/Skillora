@@ -382,7 +382,7 @@ body.light-mode,
   color: #0f172a !important;
 }
 
-/* SOLID COLOR ACTION BUTTONS & GRADIENTS (PRESERVE Crisp Pure White Text) */
+/* SOLID COLOR ACTION BUTTONS (PRESERVE Crisp Pure White Text ONLY ON BUTTONS) */
 .light-mode button.bg-indigo-600,
 .light-mode button.bg-indigo-600 *,
 .light-mode button.bg-gradient-to-r,
@@ -395,13 +395,8 @@ body.light-mode,
 .light-mode button.bg-amber-600 *,
 .light-mode button.bg-rose-600,
 .light-mode button.bg-rose-600 *,
-.light-mode .bg-indigo-600,
-.light-mode .bg-indigo-600 *,
-.light-mode .bg-gradient-to-r *,
-.light-mode .bg-emerald-600 *,
-.light-mode .bg-purple-600 *,
-.light-mode .bg-amber-600 *,
-.light-mode .bg-rose-600 * {
+.light-mode a.bg-indigo-600,
+.light-mode a.bg-gradient-to-r {
   color: #ffffff !important;
 }
 
