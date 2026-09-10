@@ -61,9 +61,6 @@ const MainLayout = () => {
         {/* Global Header */}
         <Header />
 
-        {/* Interactive Guided Demo Banner */}
-        <DemoFlowBanner />
-
         {/* Page Content */}
         <main className="flex-1 pb-16">
           {renderPage()}

@@ -295,6 +295,21 @@
   ],
   "invoices": [
     {
+      "id": "INV-1053",
+      "customerName": "ABC Institute of Technology",
+      "courseName": "AI & Machine Learning Masterclass",
+      "totalAmount": 400000,
+      "paidAmount": 200000,
+      "outstandingAmount": 200000,
+      "issueDate": "2026-09-10",
+      "dueDate": "2026-10-10",
+      "overdueDays": 0,
+      "status": "Partially Paid",
+      "paymentRisk": "LOW",
+      "riskReason": "50% deposit received. Remaining balance on schedule.",
+      "recommendedAction": "Send invoice receipt & confirm batch start date."
+    },
+    {
       "id": "INV-1052",
       "customerName": "ABC Institute of Technology",
       "courseName": "AI & Machine Learning Masterclass",
@@ -337,11 +352,11 @@
     }
   ],
   "financeSummary": {
-    "totalRevenue": 1240000,
-    "collectedAmount": 870000,
-    "outstandingAmount": 370000,
+    "totalRevenue": 1640000,
+    "collectedAmount": 1070000,
+    "outstandingAmount": 570000,
     "totalExpenses": 320000,
-    "netProfit": 760000,
+    "netProfit": 1000000,
     "profitMarginPct": 61.9
   }
 }
