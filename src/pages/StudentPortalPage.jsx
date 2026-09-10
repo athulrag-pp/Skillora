@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSkillora } from '../context/SkilloraContext';
+import { EditProfileModal } from '../components/modals/EditProfileModal';
 import { 
   GraduationCap, Sparkles, BookOpen, Award, CheckCircle2, AlertTriangle, 
   Calendar, Clock, FileText, Download, PlayCircle, Video, CheckSquare, 
-  User, ShieldCheck, ChevronRight, BarChart2, Layers, ExternalLink, ArrowRight 
+  User, ShieldCheck, ChevronRight, BarChart2, Layers, ExternalLink, ArrowRight, Edit3 
 } from 'lucide-react';
 
 export const StudentPortalPage = ({ initialTab = 'dashboard' }) => {
@@ -12,6 +13,7 @@ export const StudentPortalPage = ({ initialTab = 'dashboard' }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [expandedModule, setExpandedModule] = useState('mod-2');
   const [joinedClassModal, setJoinedClassModal] = useState(false);
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
   // Sync tab state when initialTab or activePage changes
   useEffect(() => {
@@ -169,6 +171,18 @@ export const StudentPortalPage = ({ initialTab = 'dashboard' }) => {
                   <ShieldCheck className={`w-3.5 h-3.5 ${theme === 'dark' ? 'text-cyan-400' : 'text-cyan-700'}`} />
                   <span>My Student Profile ({student.id})</span>
                 </span>
+                <button
+                  onClick={() => setIsEditProfileOpen(true)}
+                  className={`text-xs font-bold px-3 py-1 rounded-full border flex items-center space-x-1.5 transition-all shadow-xs ${
+                    theme === 'dark'
+                      ? 'bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border-indigo-500/40'
+                      : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200 font-extrabold'
+                  }`}
+                  title="Edit Profile Information"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>Edit Profile</span>
+                </button>
               </div>
               <p className={`text-xs mt-1 font-medium ${
                 theme === 'dark' ? 'text-indigo-200' : 'text-slate-600'
@@ -661,6 +675,12 @@ export const StudentPortalPage = ({ initialTab = 'dashboard' }) => {
           </div>
         </div>
       )}
+      {/* Edit Profile Modal */}
+      <EditProfileModal 
+        isOpen={isEditProfileOpen} 
+        onClose={() => setIsEditProfileOpen(false)} 
+        studentProfile={student} 
+      />
     </div>
   );
 };

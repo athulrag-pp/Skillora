@@ -335,6 +335,50 @@ export const SkilloraProvider = ({ children }) => {
     showToast(`Expense logged and synced with database!`, 'info');
   };
 
+  // User Profile Update Action
+  const updateUserProfile = async (updatedProfile) => {
+    // 1. Update currentUser in state & localStorage
+    if (currentUser) {
+      const updatedUser = {
+        ...currentUser,
+        name: updatedProfile.name || currentUser.name,
+        email: updatedProfile.email || currentUser.email,
+        avatar: updatedProfile.avatar || currentUser.avatar,
+      };
+      setCurrentUser(updatedUser);
+      localStorage.setItem('skillora_user', JSON.stringify(updatedUser));
+    }
+
+    // 2. Update matching student record in students array
+    setStudents(prev => prev.map(s => {
+      const isMatch = (
+        (s.id && updatedProfile.id && s.id === updatedProfile.id) ||
+        (s.email && currentUser?.email && s.email.toLowerCase() === currentUser.email.toLowerCase()) ||
+        (s.name && currentUser?.name && s.name.toLowerCase() === currentUser.name.toLowerCase()) ||
+        (s.id === 'STU-1002')
+      );
+      if (isMatch) {
+        return {
+          ...s,
+          name: updatedProfile.name || s.name,
+          email: updatedProfile.email || s.email,
+          avatar: updatedProfile.avatar || s.avatar,
+          parentName: updatedProfile.parentName !== undefined ? updatedProfile.parentName : s.parentName,
+          parentEmail: updatedProfile.parentEmail !== undefined ? updatedProfile.parentEmail : s.parentEmail,
+          parentPhone: updatedProfile.parentPhone !== undefined ? updatedProfile.parentPhone : s.parentPhone,
+        };
+      }
+      return s;
+    }));
+
+    if (updatedProfile.id) {
+      await api.updateStudentProfile(updatedProfile.id, updatedProfile);
+    }
+
+    triggerConfetti();
+    showToast(`Profile updated successfully! Welcome ${updatedProfile.name || 'User'}.`, 'success');
+  };
+
   const markNotificationRead = (notifId) => {
     setNotifications(prev => prev.map(n => n.id === notifId ? { ...n, read: true } : n));
   };
@@ -377,6 +421,7 @@ export const SkilloraProvider = ({ children }) => {
       addTrainer,
       convertLeadToCustomer,
       updateStudentAttendanceAndMarks,
+      updateUserProfile,
       addInvoicePayment,
       addExpense,
       isCopilotOpen,

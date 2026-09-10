@@ -209,6 +209,19 @@ export const api = {
     }
   },
 
+  updateStudentProfile: async (id, profileData) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/students/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profileData)
+      });
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  },
+
   getFinanceSummary: async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/summary`);

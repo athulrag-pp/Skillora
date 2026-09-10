@@ -101,4 +101,17 @@ router.post('/:id/metrics', (req, res) => {
   });
 });
 
+// PUT /api/students/:id (Update student profile details)
+router.put('/:id', (req, res) => {
+  const db = loadDb();
+  const index = db.students.findIndex(s => s.id === req.params.id || (s.email && s.email.toLowerCase() === (req.body.email || '').toLowerCase()));
+  if (index !== -1) {
+    db.students[index] = { ...db.students[index], ...req.body };
+    saveDb(db);
+    broadcastEvent('STUDENT_UPDATED', db.students[index]);
+    return res.json({ success: true, student: db.students[index] });
+  }
+  res.status(404).json({ error: "Student profile not found" });
+});
+
 export default router;
