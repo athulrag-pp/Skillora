@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useSkillora } from '../../context/SkilloraContext';
 import { sortStudents, filterStudents } from '../../services/sortingUtils';
+import { EditProfileModal } from '../modals/EditProfileModal';
 import { 
   ArrowUpDown, Filter, Search, Eye, AlertTriangle, MessageSquare, 
-  Sparkles, CheckCircle2, ChevronDown, User, BookOpen 
+  Sparkles, CheckCircle2, ChevronDown, User, BookOpen, Edit3, Trash2 
 } from 'lucide-react';
 
 export const StudentTable = ({ onSelectStudent }) => {
-  const { students, courses, batches } = useSkillora();
+  const { students, courses, batches, deleteStudent } = useSkillora();
+
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const [sortBy, setSortBy] = useState('overallScore');
   const [sortOrder, setSortOrder] = useState('desc');
@@ -297,13 +301,41 @@ export const StudentTable = ({ onSelectStudent }) => {
 
                   {/* Row Action Buttons */}
                   <td className="py-3 px-4 text-right">
-                    <button
-                      onClick={() => onSelectStudent && onSelectStudent(s.id)}
-                      className="bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-bold px-2.5 py-1 rounded-lg border border-indigo-500/40 transition-all flex items-center space-x-1 ml-auto"
-                    >
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Analyze</span>
-                    </button>
+                    <div className="flex items-center justify-end space-x-1.5">
+                      <button
+                        onClick={() => onSelectStudent && onSelectStudent(s.id)}
+                        className="bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-bold px-2 py-1 rounded-lg border border-indigo-500/40 transition-all flex items-center space-x-1 text-[11px]"
+                        title="Analyze Student Performance"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Analyze</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setEditingStudent(s);
+                          setIsEditModalOpen(true);
+                        }}
+                        className="bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 font-bold px-2 py-1 rounded-lg border border-purple-500/40 transition-all flex items-center space-x-1 text-[11px]"
+                        title="Edit Student Profile"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Edit</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          if (window.confirm(`Are you sure you want to permanently delete student "${s.name}" (${s.id}) from the system?`)) {
+                            deleteStudent(s.id);
+                          }
+                        }}
+                        className="bg-rose-600/30 hover:bg-rose-600/50 text-rose-300 font-bold px-2 py-1 rounded-lg border border-rose-500/40 transition-all flex items-center space-x-1 text-[11px]"
+                        title="Delete Student Profile"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Delete</span>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -311,6 +343,18 @@ export const StudentTable = ({ onSelectStudent }) => {
           </table>
         </div>
       </div>
+
+      {/* Edit Student Modal */}
+      {editingStudent && (
+        <EditProfileModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setEditingStudent(null);
+          }}
+          studentProfile={editingStudent}
+        />
+      )}
     </div>
   );
 };

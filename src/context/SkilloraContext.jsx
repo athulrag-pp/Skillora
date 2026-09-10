@@ -210,6 +210,8 @@ export const SkilloraProvider = ({ children }) => {
             triggerConfetti();
           } else if (data.type === 'STUDENT_UPDATED') {
             setStudents(prev => prev.map(s => s.id === data.payload.id ? data.payload : s));
+          } else if (data.type === 'STUDENT_DELETED') {
+            setStudents(prev => prev.filter(s => s.id !== data.payload.id));
           }
         } catch (err) {}
       };
@@ -379,6 +381,21 @@ export const SkilloraProvider = ({ children }) => {
     showToast(`Profile updated successfully! Welcome ${updatedProfile.name || 'User'}.`, 'success');
   };
 
+  // Delete Student Action (Management & Teacher privilege)
+  const deleteStudent = async (studentId) => {
+    const target = students.find(s => s.id === studentId);
+    const targetName = target ? target.name : studentId;
+
+    setStudents(prev => prev.filter(s => s.id !== studentId));
+    await api.deleteStudent(studentId);
+
+    if (selectedStudentId === studentId) {
+      setSelectedStudentId(null);
+    }
+
+    showToast(`Student "${targetName}" (${studentId}) deleted from database!`, 'info');
+  };
+
   const markNotificationRead = (notifId) => {
     setNotifications(prev => prev.map(n => n.id === notifId ? { ...n, read: true } : n));
   };
@@ -418,6 +435,7 @@ export const SkilloraProvider = ({ children }) => {
       notifications,
       markNotificationRead,
       addStudent,
+      deleteStudent,
       addTrainer,
       convertLeadToCustomer,
       updateStudentAttendanceAndMarks,

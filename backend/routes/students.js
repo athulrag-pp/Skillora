@@ -114,4 +114,17 @@ router.put('/:id', (req, res) => {
   res.status(404).json({ error: "Student profile not found" });
 });
 
+// DELETE /api/students/:id (Delete student profile)
+router.delete('/:id', (req, res) => {
+  const db = loadDb();
+  const index = db.students.findIndex(s => s.id === req.params.id);
+  if (index !== -1) {
+    const deleted = db.students.splice(index, 1)[0];
+    saveDb(db);
+    broadcastEvent('STUDENT_DELETED', deleted);
+    return res.json({ success: true, deleted });
+  }
+  res.status(404).json({ error: "Student not found" });
+});
+
 export default router;

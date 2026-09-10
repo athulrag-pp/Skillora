@@ -222,6 +222,17 @@ export const api = {
     }
   },
 
+  deleteStudent: async (id) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/students/${id}`, {
+        method: 'DELETE'
+      });
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  },
+
   getFinanceSummary: async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/summary`);

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useSkillora } from '../context/SkilloraContext';
+import { EditProfileModal } from '../components/modals/EditProfileModal';
 import { 
   CheckSquare, Calendar, Users, Sparkles, CheckCircle2, 
-  AlertTriangle, UserCheck, Search, Filter, Eye, ArrowRight, Phone, Mail 
+  AlertTriangle, UserCheck, Search, Filter, Eye, ArrowRight, Phone, Mail, Edit3, Trash2 
 } from 'lucide-react';
 
 export const TrainerPortalPage = () => {
-  const { students, batches, updateStudentAttendanceAndMarks, showToast, setSelectedStudentId, navigateTo } = useSkillora();
+  const { students, batches, updateStudentAttendanceAndMarks, deleteStudent, showToast, setSelectedStudentId, navigateTo } = useSkillora();
+
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const [selectedBatch, setSelectedBatch] = useState('AIML-01');
   const [studentFilter, setStudentFilter] = useState('ALL'); // ALL, ATT_RISK, ACAD_RISK, GRADE_A
@@ -209,15 +213,43 @@ export const TrainerPortalPage = () => {
                     </td>
                     <td className="p-3 font-bold text-purple-400">{s.overallScore}%</td>
                     <td className="p-3 text-right">
-                      <button
-                        onClick={() => {
-                          setSelectedStudentId(s.id);
-                          navigateTo('students');
-                        }}
-                        className="bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 font-bold px-2 py-1 rounded text-[10px] border border-purple-500/40"
-                      >
-                        Analyze 360
-                      </button>
+                      <div className="flex items-center justify-end space-x-1">
+                        <button
+                          onClick={() => {
+                            setSelectedStudentId(s.id);
+                            navigateTo('students');
+                          }}
+                          className="bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 font-bold px-2 py-1 rounded text-[10px] border border-purple-500/40"
+                          title="Analyze Student"
+                        >
+                          Analyze
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setEditingStudent(s);
+                            setIsEditModalOpen(true);
+                          }}
+                          className="bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-bold px-2 py-1 rounded text-[10px] border border-indigo-500/40 flex items-center space-x-1"
+                          title="Edit Student Profile"
+                        >
+                          <Edit3 className="w-3 h-3" />
+                          <span>Edit</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            if (window.confirm(`Are you sure you want to permanently delete student "${s.name}" (${s.id})?`)) {
+                              deleteStudent(s.id);
+                            }
+                          }}
+                          className="bg-rose-600/30 hover:bg-rose-600/50 text-rose-300 font-bold px-2 py-1 rounded text-[10px] border border-rose-500/40 flex items-center space-x-1"
+                          title="Delete Student Profile"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -287,6 +319,18 @@ export const TrainerPortalPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Student Profile Modal */}
+      {editingStudent && (
+        <EditProfileModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setEditingStudent(null);
+          }}
+          studentProfile={editingStudent}
+        />
+      )}
     </div>
   );
 };

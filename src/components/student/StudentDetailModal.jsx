@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useSkillora } from '../../context/SkilloraContext';
 import { generateInterventionPlan } from '../../services/aiEngine';
-import { X, Sparkles, AlertTriangle, CheckCircle2, Phone, Mail, GraduationCap, Calendar, User, FileText, ArrowRight } from 'lucide-react';
+import { EditProfileModal } from '../modals/EditProfileModal';
+import { X, Sparkles, AlertTriangle, CheckCircle2, Phone, Mail, GraduationCap, Calendar, User, FileText, ArrowRight, Edit3, Trash2 } from 'lucide-react';
 
 export const StudentDetailModal = ({ studentId, onClose }) => {
-  const { students, showToast } = useSkillora();
+  const { students, deleteStudent, showToast } = useSkillora();
   const [interventionPlan, setInterventionPlan] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const student = students.find(s => s.id === studentId);
   if (!student) return null;
@@ -16,11 +18,18 @@ export const StudentDetailModal = ({ studentId, onClose }) => {
     showToast(`Generated AI Intervention Plan for ${student.name}`, 'success');
   };
 
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to permanently delete student "${student.name}" (${student.id}) from the database?`)) {
+      deleteStudent(student.id);
+      onClose();
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
       <div className="w-full max-w-3xl glass-panel bg-gray-950 border border-indigo-500/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in duration-200">
         {/* Modal Header */}
-        <div className="p-4 bg-gradient-to-r from-indigo-900/80 to-purple-900/80 border-b border-indigo-500/30 flex items-center justify-between">
+        <div className="p-4 bg-gradient-to-r from-indigo-900/80 to-purple-900/80 border-b border-indigo-500/30 flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center space-x-3">
             <img src={student.avatar} alt={student.name} className="w-10 h-10 rounded-full object-cover border-2 border-indigo-400" />
             <div>
@@ -31,12 +40,31 @@ export const StudentDetailModal = ({ studentId, onClose }) => {
               <p className="text-[11px] text-gray-300">{student.courseName} • {student.batchName}</p>
             </div>
           </div>
-          <button 
-            onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white"
-          >
-            <X className="w-5 h-5" />
-          </button>
+
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setIsEditModalOpen(true)}
+              className="bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 font-bold px-3 py-1.5 rounded-lg border border-indigo-500/40 text-xs flex items-center space-x-1.5 transition-all"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>Edit Profile</span>
+            </button>
+
+            <button
+              onClick={handleDelete}
+              className="bg-rose-600/30 hover:bg-rose-600/50 text-rose-300 font-bold px-3 py-1.5 rounded-lg border border-rose-500/40 text-xs flex items-center space-x-1.5 transition-all"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete Student</span>
+            </button>
+
+            <button 
+              onClick={onClose}
+              className="p-1.5 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Content */}
@@ -133,6 +161,13 @@ export const StudentDetailModal = ({ studentId, onClose }) => {
           </div>
         </div>
       </div>
+
+      {/* Edit Student Profile Modal */}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        studentProfile={student}
+      />
     </div>
   );
 };
