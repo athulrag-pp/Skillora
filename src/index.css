@@ -90,6 +90,39 @@ body.light-mode,
   color-scheme: light;
 }
 
+/* Preserve pure white text & bright colors on explicitly designated dark containers in light mode */
+.light-mode .preserve-dark,
+.light-mode .preserve-dark * {
+  color: inherit;
+}
+
+.light-mode .preserve-dark h1,
+.light-mode .preserve-dark h2,
+.light-mode .preserve-dark h3,
+.light-mode .preserve-dark h4 {
+  color: #ffffff !important;
+}
+
+.light-mode .preserve-dark .text-white {
+  color: #ffffff !important;
+}
+
+.light-mode .preserve-dark .text-indigo-200 {
+  color: #c7d2fe !important;
+}
+
+.light-mode .preserve-dark .text-indigo-300 {
+  color: #a5b4fc !important;
+}
+
+.light-mode .preserve-dark .text-cyan-300 {
+  color: #67e8f9 !important;
+}
+
+.light-mode .preserve-dark .text-purple-300 {
+  color: #d8b4fe !important;
+}
+
 /* Light Mode Viewport & Main Area */
 .light-mode div.bg-\[\#0b0f19\],
 .light-mode main,
