@@ -79,6 +79,9 @@ body {
 /* ==================================================
    LIGHT MODE PERFECT CONTRAST RULES
    ================================================== */
+/* ==================================================
+   LIGHT MODE PERFECT CONTRAST SYSTEM
+   ================================================== */
 html.light-mode,
 body.light-mode,
 .light-mode {
@@ -87,7 +90,7 @@ body.light-mode,
   color-scheme: light;
 }
 
-/* Light Mode Viewport & Main */
+/* Light Mode Viewport & Main Area */
 .light-mode div.bg-\[\#0b0f19\],
 .light-mode main,
 .light-mode .bg-\[\#0b0f19\] {
@@ -95,7 +98,7 @@ body.light-mode,
   color: #0f172a !important;
 }
 
-/* Light Mode Scrollbars */
+/* Light Mode Custom Scrollbars */
 .light-mode ::-webkit-scrollbar-track {
   background: #e2e8f0;
 }
@@ -128,7 +131,7 @@ body.light-mode,
   box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15) !important;
 }
 
-/* Light Mode Headings & General Text */
+/* Light Mode Headings & Base Typography */
 .light-mode h1, 
 .light-mode h2, 
 .light-mode h3, 
@@ -138,19 +141,106 @@ body.light-mode,
   color: #0f172a !important;
 }
 
+/* Transform white text to dark slate in light mode (except solid buttons) */
+.light-mode .text-white {
+  color: #0f172a !important;
+}
+
+/* Transform light gray shades to high-contrast dark slate */
 .light-mode .text-gray-100,
 .light-mode .text-gray-200, 
 .light-mode .text-gray-300, 
-.light-mode .text-gray-400 {
+.light-mode .text-gray-400,
+.light-mode .text-slate-100,
+.light-mode .text-slate-200,
+.light-mode .text-slate-300,
+.light-mode .text-slate-400,
+.light-mode .text-zinc-100,
+.light-mode .text-zinc-200,
+.light-mode .text-zinc-300,
+.light-mode .text-zinc-400 {
   color: #334155 !important;
 }
 
 .light-mode .text-gray-500,
-.light-mode .text-gray-600 {
-  color: #64748b !important;
+.light-mode .text-gray-600,
+.light-mode .text-slate-500,
+.light-mode .text-slate-600 {
+  color: #475569 !important;
 }
 
-/* Light Mode Universal Dark Container Overrides */
+/* Transform Pastel Color Shades (100-400) to Saturated High-Contrast Shades (800) in Light Mode */
+.light-mode .text-indigo-100,
+.light-mode .text-indigo-200,
+.light-mode .text-indigo-300,
+.light-mode .text-indigo-400 {
+  color: #3730a3 !important; /* Indigo 800 */
+}
+
+.light-mode .text-purple-100,
+.light-mode .text-purple-200,
+.light-mode .text-purple-300,
+.light-mode .text-purple-400 {
+  color: #581c87 !important; /* Purple 800 */
+}
+
+.light-mode .text-cyan-100,
+.light-mode .text-cyan-200,
+.light-mode .text-cyan-300,
+.light-mode .text-cyan-400 {
+  color: #155e75 !important; /* Cyan 800 */
+}
+
+.light-mode .text-emerald-100,
+.light-mode .text-emerald-200,
+.light-mode .text-emerald-300,
+.light-mode .text-emerald-400 {
+  color: #065f46 !important; /* Emerald 800 */
+}
+
+.light-mode .text-amber-100,
+.light-mode .text-amber-200,
+.light-mode .text-amber-300,
+.light-mode .text-amber-400 {
+  color: #78350f !important; /* Amber 800 */
+}
+
+.light-mode .text-rose-100,
+.light-mode .text-rose-200,
+.light-mode .text-rose-300,
+.light-mode .text-rose-400 {
+  color: #9f1239 !important; /* Rose 800 */
+}
+
+.light-mode .text-pink-100,
+.light-mode .text-pink-200,
+.light-mode .text-pink-300,
+.light-mode .text-pink-400 {
+  color: #831843 !important; /* Pink 800 */
+}
+
+.light-mode .text-blue-100,
+.light-mode .text-blue-200,
+.light-mode .text-blue-300,
+.light-mode .text-blue-400 {
+  color: #1e40af !important; /* Blue 800 */
+}
+
+.light-mode .text-teal-100,
+.light-mode .text-teal-200,
+.light-mode .text-teal-300,
+.light-mode .text-teal-400 {
+  color: #115e59 !important; /* Teal 800 */
+}
+
+.light-mode .text-yellow-100,
+.light-mode .text-yellow-200,
+.light-mode .text-yellow-300,
+.light-mode .text-yellow-400 {
+  color: #854d0e !important; /* Yellow 800 */
+}
+
+/* Light Mode Universal Dark Background Container Overrides */
 .light-mode [class*="bg-gray-9"],
 .light-mode [class*="bg-gray-8"],
 .light-mode [class*="bg-slate-9"],
@@ -172,7 +262,49 @@ body.light-mode,
   border-color: #cbd5e1 !important;
 }
 
-/* Light Mode Form Controls */
+/* Light Mode Translucent Badge Background Adjustments */
+.light-mode [class*="bg-indigo-500/20"] {
+  background-color: rgba(99, 102, 241, 0.12) !important;
+  color: #3730a3 !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+.light-mode [class*="bg-purple-500/20"] {
+  background-color: rgba(168, 85, 247, 0.12) !important;
+  color: #581c87 !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+}
+.light-mode [class*="bg-emerald-500/20"] {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+  color: #065f46 !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+.light-mode [class*="bg-cyan-500/20"] {
+  background-color: rgba(6, 182, 212, 0.12) !important;
+  color: #155e75 !important;
+  border-color: rgba(6, 182, 212, 0.3) !important;
+}
+.light-mode [class*="bg-amber-500/20"] {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  color: #78350f !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+.light-mode [class*="bg-rose-500/20"] {
+  background-color: rgba(244, 63, 94, 0.12) !important;
+  color: #9f1239 !important;
+  border-color: rgba(244, 63, 94, 0.3) !important;
+}
+.light-mode [class*="bg-pink-500/20"] {
+  background-color: rgba(236, 72, 153, 0.12) !important;
+  color: #831843 !important;
+  border-color: rgba(236, 72, 153, 0.3) !important;
+}
+.light-mode [class*="bg-blue-500/20"] {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  color: #1e40af !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Light Mode Form Inputs & Selects */
 .light-mode input,
 .light-mode select,
 .light-mode textarea {
@@ -181,11 +313,12 @@ body.light-mode,
   border-color: #cbd5e1 !important;
 }
 
-.light-mode input::placeholder {
+.light-mode input::placeholder,
+.light-mode textarea::placeholder {
   color: #64748b !important;
 }
 
-/* Light Mode Demo Banner & Gradient Headers */
+/* Light Mode Dark Gradient Containers (Demo Banner / Modals) */
 .light-mode [class*="bg-indigo-950"],
 .light-mode [class*="from-indigo-950"] {
   background: #e0e7ff !important;
@@ -204,21 +337,13 @@ body.light-mode,
   border-color: #fde68a !important;
 }
 
-.light-mode [class*="bg-amber-950"] * {
-  color: #78350f !important;
-}
-
 .light-mode [class*="bg-emerald-950"] {
   background-color: #d1fae5 !important;
   color: #065f46 !important;
   border-color: #a7f3d0 !important;
 }
 
-.light-mode [class*="bg-emerald-950"] * {
-  color: #065f46 !important;
-}
-
-/* Light Mode Tables */
+/* Light Mode Data Tables & Headers */
 .light-mode table thead {
   background-color: #e2e8f0 !important;
   color: #334155 !important;
@@ -237,18 +362,46 @@ body.light-mode,
   background-color: #f1f5f9 !important;
 }
 
-/* SOLID COLOR BUTTONS & GRADIENTS (Preserve crisp white text over solid action buttons) */
+/* Recharts Charts Support for Light Mode */
+.light-mode .recharts-text,
+.light-mode .recharts-cartesian-axis-tick-value,
+.light-mode .recharts-legend-item-text {
+  fill: #334155 !important;
+  color: #334155 !important;
+}
+
+.light-mode .recharts-default-tooltip {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-mode .recharts-tooltip-item-name,
+.light-mode .recharts-tooltip-item-value {
+  color: #0f172a !important;
+}
+
+/* SOLID COLOR ACTION BUTTONS & GRADIENTS (PRESERVE Crisp Pure White Text) */
 .light-mode button.bg-indigo-600,
+.light-mode button.bg-indigo-600 *,
 .light-mode button.bg-gradient-to-r,
+.light-mode button.bg-gradient-to-r *,
 .light-mode button.bg-emerald-600,
+.light-mode button.bg-emerald-600 *,
 .light-mode button.bg-purple-600,
+.light-mode button.bg-purple-600 *,
 .light-mode button.bg-amber-600,
+.light-mode button.bg-amber-600 *,
+.light-mode button.bg-rose-600,
+.light-mode button.bg-rose-600 *,
 .light-mode .bg-indigo-600,
 .light-mode .bg-indigo-600 *,
 .light-mode .bg-gradient-to-r *,
 .light-mode .bg-emerald-600 *,
 .light-mode .bg-purple-600 *,
-.light-mode .bg-amber-600 * {
+.light-mode .bg-amber-600 *,
+.light-mode .bg-rose-600 * {
   color: #ffffff !important;
 }
 
