@@ -11,6 +11,11 @@ import { initialNotificationsData } from '../data/initialNotifications';
 const SkilloraContext = createContext();
 
 export const SkilloraProvider = ({ children }) => {
+  // Theme State: 'dark' | 'light'
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('skillora_theme') || 'dark';
+  });
+
   // Authentication & Active View State
   const [currentRole, setCurrentRole] = useState('MANAGEMENT');
   const [activePage, setActivePage] = useState('dashboard');
@@ -38,6 +43,26 @@ export const SkilloraProvider = ({ children }) => {
   const [isAddTrainerOpen, setIsAddTrainerOpen] = useState(false);
   const [demoStep, setDemoStep] = useState(-1);
   const [toast, setToast] = useState(null);
+
+  // Theme Sync Effect
+  useEffect(() => {
+    localStorage.setItem('skillora_theme', theme);
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-mode');
+      document.body.classList.add('light-mode');
+    } else {
+      document.documentElement.classList.remove('light-mode');
+      document.body.classList.remove('light-mode');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      showToast(`Switched to ${next.toUpperCase()} Theme`, 'info');
+      return next;
+    });
+  };
 
   const showToast = (message, type = 'info') => {
     setToast({ message, type, id: Date.now() });
@@ -234,6 +259,8 @@ export const SkilloraProvider = ({ children }) => {
 
   return (
     <SkilloraContext.Provider value={{
+      theme,
+      toggleTheme,
       currentRole,
       changeRole,
       activePage,

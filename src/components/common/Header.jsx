@@ -2,11 +2,13 @@ import React from 'react';
 import { useSkillora } from '../../context/SkilloraContext';
 import { 
   Search, Bell, Sparkles, Building2, ChevronDown, User, Shield, 
-  HelpCircle, LogOut, CheckCircle2, UserPlus, ShieldCheck, Zap 
+  HelpCircle, LogOut, CheckCircle2, UserPlus, ShieldCheck, Zap, Sun, Moon 
 } from 'lucide-react';
 
 export const Header = () => {
   const { 
+    theme,
+    toggleTheme,
     currentRole, 
     changeRole, 
     setIsSearchOpen, 
@@ -57,8 +59,24 @@ export const Header = () => {
         </button>
       </div>
 
-      {/* Right: Management Add Buttons, AI Copilot, Notifications & Role Switcher */}
+      {/* Right: Theme Switcher, Management Add Buttons, AI Copilot, Notifications & Role Switcher */}
       <div className="flex items-center space-x-2.5">
+        {/* Light Mode / Dark Mode Theme Switcher */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg bg-gray-900/80 hover:bg-gray-800 border border-gray-800 text-yellow-400 hover:text-yellow-300 transition-all flex items-center space-x-1.5"
+          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+        >
+          {theme === 'dark' ? (
+            <Sun className="w-4 h-4 text-amber-400 animate-pulse" />
+          ) : (
+            <Moon className="w-4 h-4 text-indigo-600" />
+          )}
+          <span className="text-[11px] font-bold hidden xl:inline text-gray-300">
+            {theme === 'dark' ? 'Light' : 'Dark'}
+          </span>
+        </button>
+
         {/* Management CRUD Buttons */}
         {(currentRole === 'MANAGEMENT' || currentRole === 'ADMIN') && (
           <div className="hidden lg:flex items-center space-x-2">

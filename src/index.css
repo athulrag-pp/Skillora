@@ -17,6 +17,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
@@ -40,7 +41,7 @@ body {
   background: #4b5563;
 }
 
-/* Glassmorphism Utilities */
+/* Dark Mode Glassmorphism Utilities */
 .glass-panel {
   background: rgba(17, 24, 39, 0.75);
   backdrop-filter: blur(16px);
@@ -62,17 +63,90 @@ body {
 .glow-primary {
   box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4);
 }
-
 .glow-emerald {
   box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.4);
 }
-
 .glow-rose {
   box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.4);
 }
-
 .glow-amber {
   box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.4);
+}
+
+/* Light Mode Overrides */
+html.light-mode,
+.light-mode body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  color-scheme: light;
+}
+
+.light-mode ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.light-mode ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+.light-mode .glass-panel {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px);
+  border-color: rgba(203, 213, 225, 0.8) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.light-mode .glass-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  backdrop-filter: blur(12px);
+  border-color: rgba(203, 213, 225, 0.8) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .glass-card:hover {
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.12) !important;
+}
+
+.light-mode h1, 
+.light-mode h2, 
+.light-mode h3, 
+.light-mode h4, 
+.light-mode .text-white {
+  color: #0f172a !important;
+}
+
+.light-mode .text-gray-200,
+.light-mode .text-gray-300, 
+.light-mode .text-gray-400 {
+  color: #334155 !important;
+}
+
+.light-mode .text-gray-500 {
+  color: #64748b !important;
+}
+
+.light-mode .bg-gray-900, 
+.light-mode .bg-gray-950 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+.light-mode .border-gray-800,
+.light-mode .border-gray-800\/80,
+.light-mode .border-gray-800\/60 {
+  border-color: #cbd5e1 !important;
+}
+
+.light-mode table thead {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+.light-mode table tbody tr:hover {
+  background-color: #f8fafc !important;
 }
 
 /* Custom Animations */
