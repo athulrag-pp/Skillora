@@ -3,15 +3,19 @@ import { useSkillora } from '../../context/SkilloraContext';
 import { Play, CheckCircle2, ChevronRight, ChevronLeft, RotateCcw, Sparkles, X } from 'lucide-react';
 
 export const DemoFlowBanner = () => {
-  const { demoStep, setDemoStep, navigateTo, convertLeadToCustomer, updateStudentAttendanceAndMarks, addInvoicePayment, addExpense, setIsCopilotOpen, showToast } = useSkillora();
+  const { theme, demoStep, setDemoStep, navigateTo, convertLeadToCustomer, updateStudentAttendanceAndMarks, addInvoicePayment, addExpense, setIsCopilotOpen, showToast } = useSkillora();
 
   if (demoStep === -1) {
     return (
-      <div className="bg-gradient-to-r from-indigo-950/80 via-purple-950/80 to-slate-950/80 border-b border-indigo-500/30 px-4 py-2 flex items-center justify-between">
+      <div className={`border-b px-4 py-2 flex items-center justify-between transition-colors ${
+        theme === 'dark'
+          ? 'bg-gradient-to-r from-indigo-950/80 via-purple-950/80 to-slate-950/80 border-indigo-500/30'
+          : 'bg-gradient-to-r from-indigo-50 via-purple-50 to-slate-100 border-indigo-200'
+      }`}>
         <div className="flex items-center space-x-2">
-          <Sparkles className="w-4 h-4 text-yellow-400 animate-spin-slow" />
-          <span className="text-xs font-bold text-white">Hackathon Presentation Mode</span>
-          <span className="text-[11px] text-indigo-300 hidden md:inline">
+          <Sparkles className="w-4 h-4 text-indigo-600 animate-spin-slow" />
+          <span className={`text-xs font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Hackathon Presentation Mode</span>
+          <span className={`text-[11px] hidden md:inline ${theme === 'dark' ? 'text-indigo-300' : 'text-indigo-700 font-medium'}`}>
             Run the 19-Step End-to-End Demo Flow (Lead → Learning → Profit)
           </span>
         </div>
@@ -65,16 +69,20 @@ export const DemoFlowBanner = () => {
   };
 
   return (
-    <div className="glass-panel bg-indigo-950/95 border-b border-indigo-500/40 px-4 py-2.5 flex flex-col md:flex-row items-center justify-between gap-2 z-40 sticky top-16 shadow-xl">
+    <div className={`px-4 py-2.5 flex flex-col md:flex-row items-center justify-between gap-2 z-40 sticky top-16 shadow-xl border-b transition-colors ${
+      theme === 'dark'
+        ? 'glass-panel bg-indigo-950/95 border-indigo-500/40'
+        : 'bg-white border-slate-200 text-slate-800'
+    }`}>
       <div className="flex items-center space-x-3">
-        <span className="text-xs font-black bg-indigo-600 text-white px-2.5 py-1 rounded-md">
+        <span className="text-xs font-black bg-indigo-600 text-white px-2.5 py-1 rounded-md shadow-xs">
           STEP {current.num} / {steps.length}
         </span>
         <div>
-          <h4 className="text-xs font-bold text-white flex items-center space-x-2">
+          <h4 className={`text-xs font-bold flex items-center space-x-2 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
             <span>{current.title}</span>
           </h4>
-          <p className="text-[11px] text-indigo-200">{current.desc}</p>
+          <p className={`text-[11px] ${theme === 'dark' ? 'text-indigo-200' : 'text-slate-600'}`}>{current.desc}</p>
         </div>
       </div>
 
@@ -82,7 +90,11 @@ export const DemoFlowBanner = () => {
         <button
           onClick={handlePrev}
           disabled={demoStep === 0}
-          className="p-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 disabled:opacity-40 text-gray-300 border border-gray-800"
+          className={`p-1.5 rounded-lg disabled:opacity-40 border transition-colors ${
+            theme === 'dark'
+              ? 'bg-gray-900 hover:bg-gray-800 text-gray-300 border-gray-800'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+          }`}
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -97,7 +109,11 @@ export const DemoFlowBanner = () => {
 
         <button
           onClick={() => setDemoStep(-1)}
-          className="p-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white border border-gray-800"
+          className={`p-1.5 rounded-lg border transition-colors ${
+            theme === 'dark'
+              ? 'bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white border-gray-800'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 border-slate-200'
+          }`}
           title="Exit Demo Banner"
         >
           <X className="w-4 h-4" />

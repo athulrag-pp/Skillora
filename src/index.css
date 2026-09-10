@@ -74,7 +74,10 @@ body {
 }
 
 /* ==================================================
-   LIGHT MODE PERFECT ACCURACY OVERRIDES
+   LIGHT MODE PERFECT CONTRAST RULES
+   ================================================== */
+/* ==================================================
+   LIGHT MODE PERFECT CONTRAST RULES
    ================================================== */
 html.light-mode,
 body.light-mode,
@@ -84,14 +87,15 @@ body.light-mode,
   color-scheme: light;
 }
 
-/* Light Mode Body & Main Viewport */
+/* Light Mode Viewport & Main */
 .light-mode div.bg-\[\#0b0f19\],
-.light-mode main {
+.light-mode main,
+.light-mode .bg-\[\#0b0f19\] {
   background-color: #f8fafc !important;
   color: #0f172a !important;
 }
 
-/* Light Mode Scrollbar */
+/* Light Mode Scrollbars */
 .light-mode ::-webkit-scrollbar-track {
   background: #e2e8f0;
 }
@@ -99,7 +103,7 @@ body.light-mode,
   background: #94a3b8;
 }
 
-/* Light Mode Panels, Cards & Containers */
+/* Light Mode Header, Sidebar & Glass Panels */
 .light-mode .glass-panel,
 .light-mode aside,
 .light-mode header {
@@ -110,6 +114,7 @@ body.light-mode,
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
+/* Light Mode Cards */
 .light-mode .glass-card {
   background: #ffffff !important;
   backdrop-filter: blur(12px);
@@ -123,14 +128,13 @@ body.light-mode,
   box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15) !important;
 }
 
-/* Light Mode Text Headings & Contrast */
+/* Light Mode Headings & General Text */
 .light-mode h1, 
 .light-mode h2, 
 .light-mode h3, 
 .light-mode h4, 
 .light-mode h5, 
-.light-mode h6,
-.light-mode .text-white {
+.light-mode h6 {
   color: #0f172a !important;
 }
 
@@ -146,41 +150,83 @@ body.light-mode,
   color: #64748b !important;
 }
 
-/* Light Mode Form Elements: Inputs, Selects & Modals */
+/* Light Mode Universal Dark Container Overrides */
+.light-mode [class*="bg-gray-9"],
+.light-mode [class*="bg-gray-8"],
+.light-mode [class*="bg-slate-9"],
+.light-mode [class*="bg-slate-8"],
+.light-mode [class*="bg-zinc-9"],
+.light-mode [class*="bg-zinc-8"],
+.light-mode .bg-gray-900,
+.light-mode .bg-gray-950,
+.light-mode .bg-gray-800 {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+.light-mode [class*="border-gray-8"],
+.light-mode [class*="border-gray-7"],
+.light-mode .border-gray-800,
+.light-mode .border-gray-700 {
+  border-color: #cbd5e1 !important;
+}
+
+/* Light Mode Form Controls */
 .light-mode input,
 .light-mode select,
 .light-mode textarea {
-  background-color: #f8fafc !important;
+  background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #cbd5e1 !important;
 }
 
 .light-mode input::placeholder {
-  color: #94a3b8 !important;
+  color: #64748b !important;
 }
 
-.light-mode .bg-gray-900, 
-.light-mode .bg-gray-950,
-.light-mode .bg-gray-800 {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-  border-color: #e2e8f0 !important;
+/* Light Mode Demo Banner & Gradient Headers */
+.light-mode [class*="bg-indigo-950"],
+.light-mode [class*="from-indigo-950"] {
+  background: #e0e7ff !important;
+  color: #1e1b4b !important;
+  border-color: #c7d2fe !important;
 }
 
-.light-mode .border-gray-800,
-.light-mode .border-gray-700 {
-  border-color: #e2e8f0 !important;
+.light-mode [class*="bg-indigo-950"] *,
+.light-mode [class*="from-indigo-950"] * {
+  color: #1e1b4b !important;
+}
+
+.light-mode [class*="bg-amber-950"] {
+  background-color: #fef3c7 !important;
+  color: #78350f !important;
+  border-color: #fde68a !important;
+}
+
+.light-mode [class*="bg-amber-950"] * {
+  color: #78350f !important;
+}
+
+.light-mode [class*="bg-emerald-950"] {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #a7f3d0 !important;
+}
+
+.light-mode [class*="bg-emerald-950"] * {
+  color: #065f46 !important;
 }
 
 /* Light Mode Tables */
 .light-mode table thead {
-  background-color: #f1f5f9 !important;
-  color: #475569 !important;
-  border-bottom: 2px solid #e2e8f0 !important;
+  background-color: #e2e8f0 !important;
+  color: #334155 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
 }
 
 .light-mode table thead th {
-  color: #475569 !important;
+  color: #334155 !important;
 }
 
 .light-mode table tbody tr {
@@ -191,7 +237,7 @@ body.light-mode,
   background-color: #f1f5f9 !important;
 }
 
-/* Preserve White Text on Solid Buttons & Vibrant Action Badges */
+/* SOLID COLOR BUTTONS & GRADIENTS (Preserve crisp white text over solid action buttons) */
 .light-mode button.bg-indigo-600,
 .light-mode button.bg-gradient-to-r,
 .light-mode button.bg-emerald-600,
@@ -200,45 +246,16 @@ body.light-mode,
 .light-mode .bg-indigo-600,
 .light-mode .bg-indigo-600 *,
 .light-mode .bg-gradient-to-r *,
-.light-mode .bg-emerald-600 * {
+.light-mode .bg-emerald-600 *,
+.light-mode .bg-purple-600 *,
+.light-mode .bg-amber-600 * {
   color: #ffffff !important;
 }
 
-.light-mode .bg-indigo-950\/60,
-.light-mode .bg-indigo-950\/40,
-.light-mode .bg-indigo-950\/80 {
-  background-color: #e0e7ff !important;
-  color: #3730a3 !important;
-  border-color: #c7d2fe !important;
-}
-
-.light-mode .bg-indigo-950\/60 *,
-.light-mode .bg-indigo-950\/40 * {
-  color: #3730a3 !important;
-}
-
-.light-mode .bg-amber-950\/40,
-.light-mode .bg-amber-950\/30 {
-  background-color: #fef3c7 !important;
-  color: #78350f !important;
-  border-color: #fde68a !important;
-}
-
-.light-mode .bg-amber-950\/40 *,
-.light-mode .bg-amber-950\/30 * {
-  color: #78350f !important;
-}
-
-.light-mode .bg-emerald-950\/60,
-.light-mode .bg-emerald-950\/40 {
-  background-color: #d1fae5 !important;
-  color: #065f46 !important;
-  border-color: #a7f3d0 !important;
-}
-
-.light-mode .bg-emerald-950\/60 *,
-.light-mode .bg-emerald-950\/40 * {
-  color: #065f46 !important;
+.light-mode kbd {
+  background-color: #ffffff !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
 }
 
 /* Custom Animations */

@@ -36,13 +36,25 @@ export const Header = () => {
   const currentOption = roleOptions.find(r => r.role === currentRole) || roleOptions[0];
 
   return (
-    <header className="sticky top-0 z-30 h-16 glass-panel border-b border-gray-800/60 px-4 lg:px-6 flex items-center justify-between">
+    <header className={`sticky top-0 z-30 h-16 border-b px-4 lg:px-6 flex items-center justify-between transition-colors ${
+      theme === 'dark' 
+        ? 'glass-panel border-gray-800/60 bg-gray-950/80' 
+        : 'bg-white border-slate-200 shadow-sm text-slate-800'
+    }`}>
       {/* Left: Global Search Trigger & Realtime Indicator */}
       <div className="flex items-center space-x-3">
-        <div className="hidden sm:flex items-center space-x-2 bg-gray-900/80 border border-gray-800 rounded-lg px-3 py-1.5 text-xs text-gray-300">
-          <Building2 className="w-4 h-4 text-indigo-400" />
-          <span className="font-semibold text-white">Apex EduTech Global</span>
-          <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded flex items-center space-x-1 font-extrabold">
+        <div className={`hidden sm:flex items-center space-x-2 border rounded-lg px-3 py-1.5 text-xs transition-colors ${
+          theme === 'dark'
+            ? 'bg-gray-900/80 border-gray-800 text-gray-300'
+            : 'bg-slate-100 border-slate-200 text-slate-800 shadow-xs'
+        }`}>
+          <Building2 className="w-4 h-4 text-indigo-500" />
+          <span className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Apex EduTech Global</span>
+          <span className={`text-[10px] px-1.5 py-0.5 rounded flex items-center space-x-1 font-extrabold border ${
+            theme === 'dark'
+              ? 'bg-emerald-950 text-emerald-400 border-emerald-500/30'
+              : 'bg-emerald-100 text-emerald-700 border-emerald-300'
+          }`}>
             <Zap className="w-3 h-3 animate-pulse" />
             <span>Realtime Live</span>
           </span>
@@ -51,11 +63,19 @@ export const Header = () => {
         {/* Global Search Button */}
         <button 
           onClick={() => setIsSearchOpen(true)}
-          className="flex items-center space-x-2 bg-gray-900/80 hover:bg-gray-800/90 text-gray-400 hover:text-gray-200 border border-gray-800 rounded-lg px-3.5 py-1.5 text-xs transition-all w-36 sm:w-56"
+          className={`flex items-center space-x-2 border rounded-lg px-3.5 py-1.5 text-xs transition-all w-36 sm:w-56 ${
+            theme === 'dark'
+              ? 'bg-gray-900/80 hover:bg-gray-800/90 text-gray-400 hover:text-gray-200 border-gray-800'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border-slate-200 shadow-xs'
+          }`}
         >
-          <Search className="w-4 h-4 text-gray-400" />
+          <Search className={`w-4 h-4 ${theme === 'dark' ? 'text-gray-400' : 'text-slate-500'}`} />
           <span className="truncate">Search system...</span>
-          <kbd className="hidden md:inline-block ml-auto text-[10px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded border border-gray-700">⌘K</kbd>
+          <kbd className={`hidden md:inline-block ml-auto text-[10px] px-1.5 py-0.5 rounded border font-mono ${
+            theme === 'dark'
+              ? 'bg-gray-800 text-gray-400 border-gray-700'
+              : 'bg-white text-slate-700 border-slate-300 shadow-xs'
+          }`}>⌘K</kbd>
         </button>
       </div>
 
@@ -64,7 +84,11 @@ export const Header = () => {
         {/* Light Mode / Dark Mode Theme Switcher */}
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-lg bg-gray-900/80 hover:bg-gray-800 border border-gray-800 text-yellow-400 hover:text-yellow-300 transition-all flex items-center space-x-1.5"
+          className={`p-2 rounded-lg border transition-all flex items-center space-x-1.5 ${
+            theme === 'dark'
+              ? 'bg-gray-900/80 hover:bg-gray-800 border-gray-800 text-yellow-400 hover:text-yellow-300'
+              : 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-indigo-600 hover:text-indigo-800 shadow-xs'
+          }`}
           title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
         >
           {theme === 'dark' ? (
@@ -72,7 +96,7 @@ export const Header = () => {
           ) : (
             <Moon className="w-4 h-4 text-indigo-600" />
           )}
-          <span className="text-[11px] font-bold hidden xl:inline text-gray-300">
+          <span className={`text-[11px] font-bold hidden xl:inline ${theme === 'dark' ? 'text-gray-300' : 'text-slate-700'}`}>
             {theme === 'dark' ? 'Light' : 'Dark'}
           </span>
         </button>
@@ -113,7 +137,11 @@ export const Header = () => {
             const event = new CustomEvent('open-notifications');
             window.dispatchEvent(event);
           }}
-          className="relative p-2 rounded-lg bg-gray-900/80 hover:bg-gray-800 border border-gray-800 text-gray-300 hover:text-white transition-colors"
+          className={`relative p-2 rounded-lg border transition-colors ${
+            theme === 'dark'
+              ? 'bg-gray-900/80 hover:bg-gray-800 border-gray-800 text-gray-300 hover:text-white'
+              : 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-700 hover:text-slate-900 shadow-xs'
+          }`}
           title="Notification Center"
         >
           <Bell className="w-4 h-4" />
@@ -132,18 +160,28 @@ export const Header = () => {
             <ChevronDown className="w-3 h-3 ml-0.5 opacity-70 group-hover:rotate-180 transition-transform" />
           </button>
 
-          <div className="absolute right-0 mt-1 w-56 glass-panel bg-gray-950/95 border border-gray-800 rounded-xl shadow-2xl py-2 hidden group-hover:block z-50">
-            <div className="px-3 py-1.5 border-b border-gray-800 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+          <div className={`absolute right-0 mt-1 w-56 border rounded-xl shadow-2xl py-2 hidden group-hover:block z-50 ${
+            theme === 'dark'
+              ? 'glass-panel bg-gray-950/95 border-gray-800'
+              : 'bg-white border-slate-200 shadow-xl'
+          }`}>
+            <div className={`px-3 py-1.5 border-b text-[11px] font-semibold uppercase tracking-wider ${
+              theme === 'dark' ? 'border-gray-800 text-gray-400' : 'border-slate-100 text-slate-500'
+            }`}>
               Switch User Role
             </div>
             {roleOptions.map((opt) => (
               <button
                 key={opt.role}
                 onClick={() => changeRole(opt.role)}
-                className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-gray-800/80 transition-colors ${currentRole === opt.role ? 'text-indigo-400 font-semibold bg-gray-900/60' : 'text-gray-300'}`}
+                className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors ${
+                  theme === 'dark'
+                    ? (currentRole === opt.role ? 'text-indigo-400 font-semibold bg-gray-900/60' : 'text-gray-300 hover:bg-gray-800/80')
+                    : (currentRole === opt.role ? 'text-indigo-600 font-semibold bg-indigo-50' : 'text-slate-700 hover:bg-slate-100')
+                }`}
               >
                 <span>{opt.label}</span>
-                {currentRole === opt.role && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />}
+                {currentRole === opt.role && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500" />}
               </button>
             ))}
           </div>
