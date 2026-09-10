@@ -246,6 +246,30 @@
   ],
   "trainers": [
     {
+      "id": "TRN-103",
+      "name": "Dr.BillGates",
+      "avatar": "https://i.pravatar.cc/150?img=12",
+      "email": "billgates123@gmail.com",
+      "phone": "+91 98000 11111",
+      "expertise": [
+        "AI & Machine Learning",
+        "PyTorch"
+      ],
+      "rating": 4.8,
+      "experienceYears": 6,
+      "activeBatches": [
+        "AIML-01"
+      ],
+      "assignedStudentsCount": 25,
+      "availability": "Available (Full Time)",
+      "monthlyCost": 80000,
+      "performanceScore": 90,
+      "studentAvgGrade": "A (87%)",
+      "studentAvgAttendance": 85,
+      "revenueGenerated": 200000,
+      "status": "Active"
+    },
+    {
       "id": "TRN-001",
       "name": "Arun Kumar",
       "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",

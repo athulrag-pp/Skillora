@@ -44,7 +44,7 @@ export const Sidebar = () => {
       case 'STUDENT':
         return [
           { id: 'student_portal', label: 'My Student Portal', icon: GraduationCap, badge: 'Active' },
-          { id: 'operations', label: 'Course Curriculum', icon: BookOpen }
+          { id: 'student_curriculum', label: 'Course Curriculum', icon: BookOpen }
         ];
 
       case 'PARENT':

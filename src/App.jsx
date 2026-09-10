@@ -27,20 +27,34 @@ import { AdminPage } from './pages/AdminPage';
 import { CheckCircle2, Info } from 'lucide-react';
 
 const MainLayout = () => {
-  const { activePage, toast, isAddStudentOpen, setIsAddStudentOpen, isAddTrainerOpen, setIsAddTrainerOpen } = useSkillora();
+  const { activePage, currentRole, toast, isAddStudentOpen, setIsAddStudentOpen, isAddTrainerOpen, setIsAddTrainerOpen } = useSkillora();
 
   if (activePage === 'login') {
     return <LoginLanding />;
   }
 
   const renderPage = () => {
+    // Strict Role-Based Security Guard:
+    // If logged in as STUDENT, access is strictly restricted to individual student dashboard and course curriculum
+    if (currentRole === 'STUDENT') {
+      if (activePage === 'student_curriculum') {
+        return <StudentPortalPage initialTab="curriculum" />;
+      }
+      return <StudentPortalPage initialTab="dashboard" />;
+    }
+
+    if (currentRole === 'PARENT') {
+      return <ParentPortalPage />;
+    }
+
     switch (activePage) {
       case 'crm': return <CRMPage />;
       case 'customer360': return <Customer360Page />;
       case 'operations': return <OperationsPage />;
       case 'students': return <StudentIntelligencePage />;
       case 'trainer_portal': return <TrainerPortalPage />;
-      case 'student_portal': return <StudentPortalPage />;
+      case 'student_portal': return <StudentPortalPage initialTab="dashboard" />;
+      case 'student_curriculum': return <StudentPortalPage initialTab="curriculum" />;
       case 'parent_portal': return <ParentPortalPage />;
       case 'finance': return <FinancePage />;
       case 'analytics': return <AnalyticsPage />;
