@@ -259,6 +259,11 @@ export const SkilloraProvider = ({ children }) => {
     showToast(`Teacher "${trainerData.name}" onboarded into Management Database!`, 'success');
   };
 
+  const deleteTrainer = (trainerId) => {
+    setTrainers(prev => prev.filter(t => t.id !== trainerId));
+    showToast('Teacher record removed from Management Database', 'info');
+  };
+
   // CRM Action: Convert Lead to Customer
   const convertLeadToCustomer = async (leadId) => {
     const targetLead = leads.find(l => l.id === leadId);
@@ -448,6 +453,7 @@ export const SkilloraProvider = ({ children }) => {
       addStudent,
       deleteStudent,
       addTrainer,
+      deleteTrainer,
       convertLeadToCustomer,
       updateStudentAttendanceAndMarks,
       updateUserProfile,

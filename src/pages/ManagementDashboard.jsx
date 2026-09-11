@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSkillora } from '../context/SkilloraContext';
 import { KPICard } from '../components/common/KPICard';
 import { AIActionCenter } from '../components/ai/AIActionCenter';
 import { PerformanceMatrix } from '../components/student/PerformanceMatrix';
+import { TrainerDetailModal } from '../components/modals/TrainerDetailModal';
 import { 
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, 
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area 
 } from 'recharts';
 import { 
   Target, Award, GraduationCap, Users, Layers, DollarSign, 
-  Wallet, AlertTriangle, TrendingUp, Sparkles, ArrowRight, PieChart as PieIcon 
+  Wallet, AlertTriangle, TrendingUp, Sparkles, ArrowRight, PieChart as PieIcon, ShieldCheck, UserCheck, Star, Eye, Trash2, Plus 
 } from 'lucide-react';
 
 export const ManagementDashboard = () => {
-  const { financeSummary, leads, students, batches, trainers, navigateTo, setSelectedStudentId } = useSkillora();
+  const { financeSummary, leads, students, batches, trainers, navigateTo, setSelectedStudentId, setIsAddTrainerOpen, deleteTrainer, showToast } = useSkillora();
+
+  const [selectedTrainerForDetail, setSelectedTrainerForDetail] = useState(null);
+  const [isTrainerModalOpen, setIsTrainerModalOpen] = useState(false);
 
   // Recharts Data Sets
   const salesFunnelData = [
@@ -182,6 +186,140 @@ export const ManagementDashboard = () => {
           navigateTo('students');
         }}
       />
+
+      {/* Management Faculty & Trainer Roster (Requirements #30-#32) */}
+      <div className="glass-panel p-5 rounded-2xl border border-indigo-500/40 space-y-4 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center space-x-3">
+            <div className="p-2.5 rounded-xl bg-purple-600/30 text-purple-300 border border-purple-500/40">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-base font-black text-white uppercase tracking-wider flex items-center space-x-2">
+                <span>Teachers & Faculty Monitored by Management</span>
+                <span className="text-[10px] font-extrabold bg-purple-500/20 text-purple-300 px-2.5 py-0.5 rounded-full border border-purple-500/30">
+                  {trainers.length} Active Teachers
+                </span>
+              </h2>
+              <p className="text-xs text-gray-400">
+                Observe teacher ratings, technical expertise, active batch assignments, student counts, monthly compensation, and status.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setIsAddTrainerOpen(true)}
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition-all shadow-lg flex items-center space-x-1.5 shrink-0"
+          >
+            <Plus className="w-4 h-4" />
+            <span>+ Onboard New Teacher</span>
+          </button>
+        </div>
+
+        {/* Trainers Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-gray-900/90 text-gray-400 uppercase text-[10px] font-extrabold border-b border-gray-800">
+              <tr>
+                <th className="p-3">Teacher / Trainer</th>
+                <th className="p-3">Technical Expertise</th>
+                <th className="p-3">Rating</th>
+                <th className="p-3">Assigned Batches</th>
+                <th className="p-3">Students</th>
+                <th className="p-3">Monthly Cost</th>
+                <th className="p-3">Management Status</th>
+                <th className="p-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800/60 font-medium">
+              {trainers.map(t => (
+                <tr key={t.id} className="hover:bg-gray-800/40 transition-colors">
+                  <td className="p-3">
+                    <div className="flex items-center space-x-3">
+                      <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-full object-cover border-2 border-purple-500 shadow-md" />
+                      <div>
+                        <div className="font-bold text-white text-xs flex items-center space-x-1.5">
+                          <span>{t.name}</span>
+                          <span className="text-[10px] text-gray-400 font-mono">({t.id})</span>
+                        </div>
+                        <div className="text-[10px] text-purple-300 font-mono">{t.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="p-3">
+                    <div className="flex flex-wrap gap-1 max-w-xs">
+                      {(t.expertise || []).slice(0, 3).map((exp, idx) => (
+                        <span key={idx} className="text-[9px] bg-purple-950/80 text-purple-200 px-1.5 py-0.5 rounded border border-purple-500/30">
+                          {exp}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="p-3">
+                    <div className="flex items-center space-x-1 font-bold text-amber-400">
+                      <Star className="w-3.5 h-3.5 fill-current" />
+                      <span>{t.rating || 4.8} / 5.0</span>
+                    </div>
+                  </td>
+                  <td className="p-3 font-bold text-white">
+                    {(t.activeBatches || []).join(', ') || 'N/A'}
+                  </td>
+                  <td className="p-3 font-bold text-indigo-300">{t.assignedStudentsCount || 25} Students</td>
+                  <td className="p-3 font-bold text-emerald-400">₹{((t.monthlyCost || 80000)/1000).toFixed(0)}k/mo</td>
+                  <td className="p-3">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black ${
+                      t.status === 'Top Performer' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                      t.status === 'Attendance Alert' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                      'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                    }`}>
+                      {t.status || 'Active Staff'}
+                    </span>
+                  </td>
+                  <td className="p-3 text-right">
+                    <div className="flex items-center justify-end space-x-1.5">
+                      <button
+                        onClick={() => {
+                          setSelectedTrainerForDetail(t);
+                          setIsTrainerModalOpen(true);
+                        }}
+                        className="bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 font-bold px-2.5 py-1 rounded-lg text-[10px] border border-purple-500/40 flex items-center space-x-1 transition-all"
+                        title="View Complete Teacher Details"
+                      >
+                        <Eye className="w-3 h-3" />
+                        <span>View Details</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          if (window.confirm(`Are you sure you want to remove teacher "${t.name}"?`)) {
+                            deleteTrainer(t.id);
+                          }
+                        }}
+                        className="bg-rose-600/20 hover:bg-rose-600/40 text-rose-300 font-bold p-1 rounded-lg border border-rose-500/30 transition-all"
+                        title="Remove Teacher Record"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Detailed Teacher Profile Modal */}
+      {selectedTrainerForDetail && (
+        <TrainerDetailModal
+          isOpen={isTrainerModalOpen}
+          onClose={() => {
+            setIsTrainerModalOpen(false);
+            setSelectedTrainerForDetail(null);
+          }}
+          trainer={selectedTrainerForDetail}
+        />
+      )}
     </div>
   );
 };
