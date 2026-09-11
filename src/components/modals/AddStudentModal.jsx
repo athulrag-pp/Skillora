@@ -46,7 +46,7 @@ export const AddStudentModal = ({ isOpen, onClose }) => {
         <div className="p-4 bg-gradient-to-r from-indigo-900/80 to-purple-900/80 border-b border-indigo-500/30 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <UserPlus className="w-5 h-5 text-indigo-300" />
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">Management Add New Student</h2>
+            <h2 className="text-sm font-bold text-white uppercase tracking-wider">Add & Register New Student Details</h2>
           </div>
           <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white">
             <X className="w-5 h-5" />

@@ -16,50 +16,18 @@ export const SkilloraProvider = ({ children }) => {
     return localStorage.getItem('skillora_theme') || 'dark';
   });
 
-  // Authentication & Active View State
-  const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem('skillora_user');
-      return saved ? JSON.parse(saved) : null;
-    } catch (e) {
-      return null;
-    }
-  });
+  // Authentication & Active View State: Always require explicit login process when entering platform
+  const [currentUser, setCurrentUser] = useState(null);
+  const [token, setToken] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentRole, setCurrentRole] = useState('MANAGEMENT');
+  const [activePage, setActivePage] = useState('login');
 
-  const [token, setToken] = useState(() => localStorage.getItem('skillora_token') || '');
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const savedToken = localStorage.getItem('skillora_token');
-    return Boolean(savedToken);
-  });
-
-  const [currentRole, setCurrentRole] = useState(() => {
-    try {
-      const saved = localStorage.getItem('skillora_user');
-      if (saved) return JSON.parse(saved).role || 'MANAGEMENT';
-    } catch (e) {}
-    return 'MANAGEMENT';
-  });
-
-  const [activePage, setActivePage] = useState(() => {
-    const savedToken = localStorage.getItem('skillora_token');
-    const savedUser = localStorage.getItem('skillora_user');
-    if (savedToken && savedUser) {
-      try {
-        const u = JSON.parse(savedUser);
-        switch (u.role) {
-          case 'STUDENT': return 'student_portal';
-          case 'PARENT': return 'parent_portal';
-          case 'TRAINER': return 'trainer_portal';
-          case 'SALES': return 'crm';
-          case 'OPERATIONS': return 'operations';
-          case 'FINANCE': return 'finance';
-          case 'ADMIN': return 'admin';
-          default: return 'dashboard';
-        }
-      } catch (e) {}
-    }
-    return 'login';
-  });
+  // Clear stale session on initial load to mandate login process upon entering platform
+  useEffect(() => {
+    localStorage.removeItem('skillora_token');
+    localStorage.removeItem('skillora_user');
+  }, []);
   const [selectedCustomerId, setSelectedCustomerId] = useState('LEAD-101');
   const [selectedStudentId, setSelectedStudentId] = useState('STU-1002');
   

@@ -3,11 +3,11 @@ import { useSkillora } from '../context/SkilloraContext';
 import { EditProfileModal } from '../components/modals/EditProfileModal';
 import { 
   CheckSquare, Calendar, Users, Sparkles, CheckCircle2, 
-  AlertTriangle, UserCheck, Search, Filter, Eye, ArrowRight, Phone, Mail, Edit3, Trash2 
+  AlertTriangle, UserCheck, Search, Filter, Eye, ArrowRight, Phone, Mail, Edit3, Trash2, UserPlus 
 } from 'lucide-react';
 
 export const TrainerPortalPage = () => {
-  const { students, batches, updateStudentAttendanceAndMarks, deleteStudent, showToast, setSelectedStudentId, navigateTo } = useSkillora();
+  const { students, batches, updateStudentAttendanceAndMarks, deleteStudent, showToast, setSelectedStudentId, navigateTo, setIsAddStudentOpen } = useSkillora();
 
   const [editingStudent, setEditingStudent] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -48,30 +48,40 @@ export const TrainerPortalPage = () => {
             <span>Trainer Student Monitoring & Portal</span>
           </h1>
           <p className="text-xs text-gray-400">
-            Assigned Trainer: <strong>Arun Kumar</strong> • Monitoring Batch Rosters & Attendance
+            Assigned Trainer: <strong>Arun Kumar</strong> • Monitoring Batch Rosters, Adding & Editing Student Details
           </p>
         </div>
 
-        {/* Batch Selection Dropdown */}
-        <div className="flex items-center space-x-2 bg-gray-900 border border-gray-800 rounded-xl p-1.5">
-          <span className="text-xs font-bold text-gray-400 pl-2">Active Batch:</span>
-          <select
-            value={selectedBatch}
-            onChange={(e) => {
-              setSelectedBatch(e.target.value);
-              const bStus = students.filter(s => s.batchId === e.target.value);
-              if (bStus.length) {
-                setSelectedStudentForLog(bStus[0].id);
-                setAttendanceVal(bStus[0].attendance);
-                setAcademicVal(bStus[0].academic);
-              }
-            }}
-            className="bg-gray-950 text-white text-xs font-extrabold rounded-lg px-3 py-1.5 focus:outline-none border border-gray-700"
+        {/* Action Controls: Add Student & Batch Selection Dropdown */}
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setIsAddStudentOpen(true)}
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition-all shadow-lg flex items-center space-x-1.5"
           >
-            {batches.map(b => (
-              <option key={b.id} value={b.id}>{b.id} - {b.batchName} ({b.studentCount} Students)</option>
-            ))}
-          </select>
+            <UserPlus className="w-4 h-4" />
+            <span>+ Add New Student</span>
+          </button>
+
+          <div className="flex items-center space-x-2 bg-gray-900 border border-gray-800 rounded-xl p-1.5">
+            <span className="text-xs font-bold text-gray-400 pl-2">Active Batch:</span>
+            <select
+              value={selectedBatch}
+              onChange={(e) => {
+                setSelectedBatch(e.target.value);
+                const bStus = students.filter(s => s.batchId === e.target.value);
+                if (bStus.length) {
+                  setSelectedStudentForLog(bStus[0].id);
+                  setAttendanceVal(bStus[0].attendance);
+                  setAcademicVal(bStus[0].academic);
+                }
+              }}
+              className="bg-gray-950 text-white text-xs font-extrabold rounded-lg px-3 py-1.5 focus:outline-none border border-gray-700"
+            >
+              {batches.map(b => (
+                <option key={b.id} value={b.id}>{b.id} - {b.batchName} ({b.studentCount} Students)</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 

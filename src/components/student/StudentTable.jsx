@@ -4,11 +4,11 @@ import { sortStudents, filterStudents } from '../../services/sortingUtils';
 import { EditProfileModal } from '../modals/EditProfileModal';
 import { 
   ArrowUpDown, Filter, Search, Eye, AlertTriangle, MessageSquare, 
-  Sparkles, CheckCircle2, ChevronDown, User, BookOpen, Edit3, Trash2 
+  Sparkles, CheckCircle2, ChevronDown, User, BookOpen, Edit3, Trash2, UserPlus 
 } from 'lucide-react';
 
 export const StudentTable = ({ onSelectStudent }) => {
-  const { students, courses, batches, deleteStudent } = useSkillora();
+  const { students, courses, batches, deleteStudent, setIsAddStudentOpen } = useSkillora();
 
   const [editingStudent, setEditingStudent] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -200,10 +200,19 @@ export const StudentTable = ({ onSelectStudent }) => {
             <button 
               onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
               className="p-1 text-gray-400 hover:text-white"
+              title="Toggle Sort Order"
             >
               <ArrowUpDown className="w-3.5 h-3.5" />
             </button>
           </div>
+
+          <button
+            onClick={() => setIsAddStudentOpen(true)}
+            className="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5"
+          >
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>+ Add Student</span>
+          </button>
         </div>
       </div>
 
