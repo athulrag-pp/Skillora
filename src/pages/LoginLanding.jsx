@@ -52,9 +52,9 @@ export const LoginLanding = () => {
     setErrorMsg('');
     setLoading(true);
     try {
-      await loginWithCredentials(loginEmail, loginPassword, selectedRole);
-      changeRole(selectedRole, true);
-      navigateTo('dashboard');
+      const loggedUser = await loginWithCredentials(loginEmail, loginPassword, selectedRole);
+      const effectiveRole = loggedUser?.role || selectedRole || 'MANAGEMENT';
+      changeRole(effectiveRole, true);
     } catch (err) {
       setErrorMsg(err.message || 'Login failed. Only registered emails are allowed.');
     } finally {
@@ -73,15 +73,15 @@ export const LoginLanding = () => {
 
     setLoading(true);
     try {
-      await signupUser({
+      const newUser = await signupUser({
         name: signupName,
         email: signupEmail,
         password: signupPassword,
         role: signupRole,
         organization: signupOrg
       });
-      changeRole(signupRole, true);
-      navigateTo('dashboard');
+      const effectiveRole = newUser?.role || signupRole || 'MANAGEMENT';
+      changeRole(effectiveRole, true);
     } catch (err) {
       setErrorMsg(err.message || 'Sign up registration failed.');
     } finally {
