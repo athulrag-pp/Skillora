@@ -425,3 +425,101 @@ export const loadDb = () => {
 export const saveDb = (data) => {
   fs.writeFileSync(dbFilePath, JSON.stringify(data, null, 2), 'utf-8');
 };
+
+// User lookup by email across users, students, and trainers
+export const findUserByEmail = (email) => {
+  const db = loadDb();
+  const lower = (email || '').toLowerCase().trim();
+  
+  const user = db.users.find(u => u.email && u.email.toLowerCase() === lower);
+  if (user) return user;
+
+  const student = db.students.find(s => s.email && s.email.toLowerCase() === lower);
+  if (student) {
+    return {
+      id: student.id,
+      name: student.name,
+      email: student.email,
+      role: 'STUDENT',
+      organization: 'Skillora EduTech',
+      avatar: student.avatar,
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash
+    };
+  }
+
+  const trainer = db.trainers.find(t => t.email && t.email.toLowerCase() === lower);
+  if (trainer) {
+    return {
+      id: trainer.id,
+      name: trainer.name,
+      email: trainer.email,
+      role: 'TRAINER',
+      organization: 'Skillora EduTech',
+      avatar: trainer.avatar,
+      salt: defaultSeedCreds.salt,
+      hash: defaultSeedCreds.hash
+    };
+  }
+
+  return null;
+};
+
+export const authenticateUser = (email, password) => {
+  const user = findUserByEmail(email);
+  if (!user) return false;
+  if (!user.salt || !user.hash) return true;
+  return verifyPassword(password, user.salt, user.hash);
+};
+
+export const createUser = ({ name, email, password, role, organization }) => {
+  const db = loadDb();
+  const lower = (email || '').toLowerCase().trim();
+  const { salt, hash } = hashPassword(password);
+
+  const newUser = {
+    id: `USR-${Date.now()}`,
+    name: name || 'Registered User',
+    email: lower,
+    role: role || 'MANAGEMENT',
+    organization: organization || 'Apex EduTech Global',
+    salt,
+    hash,
+    createdAt: new Date().toISOString()
+  };
+
+  db.users.push(newUser);
+  saveDb(db);
+  const { salt: _, hash: __, ...sanitized } = newUser;
+  return sanitized;
+};
+
+export const updateUserPassword = (email, newPassword) => {
+  const db = loadDb();
+  const lower = (email || '').toLowerCase().trim();
+  const { salt, hash } = hashPassword(newPassword);
+
+  const userIndex = db.users.findIndex(u => u.email && u.email.toLowerCase() === lower);
+  if (userIndex !== -1) {
+    db.users[userIndex].salt = salt;
+    db.users[userIndex].hash = hash;
+    saveDb(db);
+    return true;
+  }
+
+  // If user is from seed student/trainer list, add user record to db.users with updated password
+  const existing = findUserByEmail(email);
+  if (existing) {
+    const newUser = {
+      ...existing,
+      salt,
+      hash,
+      createdAt: new Date().toISOString()
+    };
+    db.users.push(newUser);
+    saveDb(db);
+    return true;
+  }
+
+  return false;
+};

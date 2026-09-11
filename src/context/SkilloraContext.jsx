@@ -20,14 +20,17 @@ export const SkilloraProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem('skillora_user');
-      return saved ? JSON.parse(saved) : { name: 'Executive Manager', email: 'manager@skillora.demo', role: 'MANAGEMENT', organization: 'Apex EduTech Global' };
+      return saved ? JSON.parse(saved) : null;
     } catch (e) {
       return null;
     }
   });
 
-  const [token, setToken] = useState(() => localStorage.getItem('skillora_token') || 'skl_token_demo');
-  const [isAuthenticated, setIsAuthenticated] = useState(() => true);
+  const [token, setToken] = useState(() => localStorage.getItem('skillora_token') || '');
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const savedToken = localStorage.getItem('skillora_token');
+    return Boolean(savedToken);
+  });
 
   const [currentRole, setCurrentRole] = useState(() => {
     try {
@@ -37,7 +40,26 @@ export const SkilloraProvider = ({ children }) => {
     return 'MANAGEMENT';
   });
 
-  const [activePage, setActivePage] = useState('dashboard');
+  const [activePage, setActivePage] = useState(() => {
+    const savedToken = localStorage.getItem('skillora_token');
+    const savedUser = localStorage.getItem('skillora_user');
+    if (savedToken && savedUser) {
+      try {
+        const u = JSON.parse(savedUser);
+        switch (u.role) {
+          case 'STUDENT': return 'student_portal';
+          case 'PARENT': return 'parent_portal';
+          case 'TRAINER': return 'trainer_portal';
+          case 'SALES': return 'crm';
+          case 'OPERATIONS': return 'operations';
+          case 'FINANCE': return 'finance';
+          case 'ADMIN': return 'admin';
+          default: return 'dashboard';
+        }
+      } catch (e) {}
+    }
+    return 'login';
+  });
   const [selectedCustomerId, setSelectedCustomerId] = useState('LEAD-101');
   const [selectedStudentId, setSelectedStudentId] = useState('STU-1002');
   
@@ -396,6 +418,25 @@ export const SkilloraProvider = ({ children }) => {
     showToast(`Student "${targetName}" (${studentId}) deleted from database!`, 'info');
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const res = await api.forgotPassword(email);
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const resetPassword = async (email, newPassword, token) => {
+    try {
+      const res = await api.resetPassword(email, newPassword, token);
+      showToast(`Password updated for ${email}. Please log in.`, 'success');
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  };
+
   const markNotificationRead = (notifId) => {
     setNotifications(prev => prev.map(n => n.id === notifId ? { ...n, read: true } : n));
   };
@@ -409,6 +450,8 @@ export const SkilloraProvider = ({ children }) => {
       isAuthenticated,
       loginWithCredentials,
       signupUser,
+      forgotPassword,
+      resetPassword,
       logout,
       currentRole,
       changeRole,
